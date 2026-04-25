@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TISED SEAD Python Notebook Tutorial , McGill University</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g50:#EAF3DE;--g100:#C0DD97;--g200:#97C459;--g600:#3B6D11;--g800:#27500A;--g900:#173404;
+  --t50:#E1F5EE;--t100:#9FE1CB;--t600:#0F6E56;--t800:#085041;
+  --b50:#E6F1FB;--b100:#B5D4F4;--b600:#185FA5;--b800:#0C447C;
+  --a50:#FAEEDA;--a100:#FAC775;--a600:#854F0B;--a800:#633806;
+  --gr50:#F1EFE8;--gr100:#D3D1C7;--gr200:#B4B2A9;--gr600:#5F5E5A;--gr800:#444441;--gr900:#2C2C2A;
+}
+body{font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.7;color:var(--gr900);background:#FAFAF8;min-height:100vh}
+.hero{background:var(--g900);color:var(--g50);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 80%,rgba(29,158,117,.18) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 80% 20%,rgba(97,196,89,.12) 0%,transparent 55%);pointer-events:none}
+.eyebrow{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.12em;color:var(--g100);text-transform:uppercase;margin-bottom:1.2rem;opacity:.85}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3.4rem);font-weight:400;line-height:1.15;color:#fff;max-width:700px;margin:0 auto 1.2rem}
+.hero h1 em{color:var(--g100);font-style:normal}
+.hero-sub{font-size:1.05rem;color:var(--g100);max-width:520px;margin:0 auto 2.5rem;opacity:.9}
+.nb-buttons{display:flex;flex-direction:column;align-items:center;gap:1rem;position:relative;z-index:1}
+.nb-buttons-label{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--g100);opacity:.7;margin-bottom:.25rem}
+.nb-btn-row{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center}
+.btn-nb{display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;padding:.7rem 1.4rem;border-radius:999px;text-decoration:none;transition:transform .15s,opacity .15s;border:1.5px solid}
+.btn-nb:hover{transform:translateY(-2px);opacity:.92}
+.btn-nb svg{width:15px;height:15px;flex-shrink:0}
+.btn-1{background:var(--t50);color:var(--t800);border-color:var(--t100)}
+.btn-2{background:var(--b50);color:var(--b800);border-color:var(--b100)}
+.btn-3{background:var(--a50);color:var(--a800);border-color:var(--a100)}
+.save-note{display:block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:.75rem 1.25rem;font-size:13.5px;color:var(--g100);max-width:500px;text-align:center;margin-top:.5rem;line-height:1.6}
+.section{max-width:860px;margin:0 auto;padding:3.5rem 2rem}
+.slabel{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gr600);margin-bottom:.5rem}
+.stitle{font-family:'DM Serif Display',serif;font-size:1.75rem;font-weight:400;color:var(--gr900);margin-bottom:.6rem;line-height:1.25}
+.ssub{font-size:.95rem;color:var(--gr600);max-width:560px;margin-bottom:2.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem}
+.card{background:#fff;border:.5px solid var(--gr100);border-radius:16px;padding:1.5rem 1.5rem 1.25rem;display:flex;flex-direction:column;gap:.75rem}
+.num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
+.c1 .num{background:var(--t50);color:var(--t800)}
+.c2 .num{background:var(--b50);color:var(--b800)}
+.c3 .num{background:var(--a50);color:var(--a800)}
+.ctitle{font-family:'DM Serif Display',serif;font-size:1.15rem;font-weight:400;color:var(--gr900);line-height:1.25}
+.cdesc{font-size:.875rem;color:var(--gr600);line-height:1.6;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:'DM Mono',monospace;font-size:11px;padding:3px 9px;border-radius:999px;border:.5px solid}
+.c1 .tag{background:var(--t50);color:var(--t600);border-color:var(--t100)}
+.c2 .tag{background:var(--b50);color:var(--b600);border-color:var(--b100)}
+.c3 .tag{background:var(--a50);color:var(--a600);border-color:var(--a100)}
+.ctime{font-size:12px;color:var(--gr200)}
+.open-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:.45rem 1rem;border-radius:999px;text-decoration:none;border:1px solid;margin-top:.25rem;align-self:flex-start;transition:transform .15s}
+.open-btn:hover{transform:translateY(-1px)}
+.open-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.c1 .open-btn{background:var(--t50);color:var(--t800);border-color:var(--t100)}
+.c2 .open-btn{background:var(--b50);color:var(--b800);border-color:var(--b100)}
+.c3 .open-btn{background:var(--a50);color:var(--a800);border-color:var(--a100)}
+.steps{display:flex;flex-direction:column}
+.step{display:flex;gap:1.25rem;padding:1.25rem 0;border-bottom:.5px solid var(--gr50);align-items:flex-start}
+.step:last-child{border-bottom:none}
+.sicon{width:36px;height:36px;flex-shrink:0;background:var(--g50);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.sicon svg{width:16px;height:16px;stroke:var(--g600);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sbody h3{font-size:.95rem;font-weight:500;color:var(--gr900);margin-bottom:3px}
+.sbody p{font-size:.875rem;color:var(--gr600);line-height:1.55}
+code{font-family:'DM Mono',monospace;font-size:12px;background:var(--gr50);padding:2px 6px;border-radius:4px;color:var(--gr800)}
+.step-highlight{background:var(--g50);border-left:3px solid var(--g200);border-radius:0 10px 10px 0;padding:1rem 1.25rem}
+.step-highlight .sbody h3{color:var(--g800)}
+.step-highlight .sbody p{color:var(--g600)}
+.step-highlight .sicon{background:var(--g100)}
+.info{background:var(--gr50);border-left:3px solid var(--gr100);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin:2rem 0;font-size:.875rem;color:var(--gr600)}
+.info strong{color:var(--gr800)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.cc{background:#fff;border:.5px solid var(--gr100);border-radius:12px;padding:1.1rem 1.25rem}
+.clabel{font-family:'DM Mono',monospace;font-size:11px;color:var(--gr200);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.cname{font-weight:500;font-size:.9rem;color:var(--gr900);margin-bottom:4px}
+.ctool{font-family:'DM Mono',monospace;font-size:12px;color:var(--g600)}
+hr{border:none;border-top:.5px solid var(--gr50)}
+footer{text-align:center;padding:2rem;font-size:12.5px;color:var(--gr200);border-top:.5px solid var(--gr50)}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <p class="eyebrow">McGill University · TISED SEAD Program</p>
+  <h1>Python &amp; Jupyter<br><em>Notebook Tutorial</em></h1>
+  <p class="hero-sub">Three short interactive notebooks to get you familiar with the Python &amp; Jupyter Notebook tools you'll use in the SEAD program. It runs directly in your browser, no installation, no set-up!</p>
+  <div class="nb-buttons">
+    <p class="nb-buttons-label">Open a notebook in Google Colab</p>
+    <div class="nb-btn-row">
+      <a class="btn-nb btn-1" href="https://colab.research.google.com/drive/1IypLYt5j5TwBNnIqp_9qHVxa5sdzidCB" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        01 · The Interface
+      </a>
+      <a class="btn-nb btn-2" href="https://colab.research.google.com/drive/1xYpmgOgnXFfzTeravh9J15hIJhF4J-bR" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        02 · Variables & Values
+      </a>
+      <a class="btn-nb btn-3" href="https://colab.research.google.com/drive/1TwRNAA2o8cr0FeXjaTBBAMUsSXNMtU2y" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        03 · Libraries & Charts
+      </a>
+    </div>
+    <div class="save-note">
+      When the notebook opens, go to <strong>File → Save a copy in Drive</strong> so your changes are saved to your own Google account.
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <p class="slabel">What you'll do</p>
+  <h2 class="stitle">Three notebooks, ~1 hour total</h2>
+  <p class="ssub">Work through them in order. You won't write any code , just run cells, change labelled values, and observe what happens.</p>
+  <div class="grid">
+    <div class="card c1">
+      <div class="num">01</div>
+      <p class="ctitle">The Interface</p>
+      <p class="cdesc">Learn the mechanics of Jupyter , what cells are, how to run them, why order matters, and how to recover when something goes wrong.</p>
+      <div class="tags"><span class="tag">Shift + Enter</span><span class="tag">Cell order</span><span class="tag">Kernel</span><span class="tag">NameError</span></div>
+      <p class="ctime">~15 min</p>
+      <a class="open-btn" href="https://colab.research.google.com/drive/1IypLYt5j5TwBNnIqp_9qHVxa5sdzidCB" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open in Colab
+      </a>
+    </div>
+    <div class="card c2">
+      <div class="num">02</div>
+      <p class="ctitle">Variables & Values</p>
+      <p class="cdesc">Learn to read and modify code. Change temperatures, city names, and emission values. Toggle options by commenting and uncommenting lines.</p>
+      <div class="tags"><span class="tag">Variables</span><span class="tag">Comments (#)</span><span class="tag">Lists</span><span class="tag">Toggle options</span></div>
+      <p class="ctime">~20 min</p>
+      <a class="open-btn" href="https://colab.research.google.com/drive/1xYpmgOgnXFfzTeravh9J15hIJhF4J-bR" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open in Colab
+      </a>
+    </div>
+    <div class="card c3">
+      <div class="num">03</div>
+      <p class="ctitle">Libraries, Data & Charts</p>
+      <p class="cdesc">See what a real lab notebook looks like end-to-end. Import libraries, read a data table, switch what a chart displays, and run a full workflow.</p>
+      <div class="tags"><span class="tag">import</span><span class="tag">DataFrame</span><span class="tag">matplotlib</span><span class="tag">pandas</span></div>
+      <p class="ctime">~25 min</p>
+      <a class="open-btn" href="https://colab.research.google.com/drive/1TwRNAA2o8cr0FeXjaTBBAMUsSXNMtU2y" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open in Colab
+      </a>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="section">
+  <p class="slabel">Getting started</p>
+  <h2 class="stitle">How to use the notebooks</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="sicon"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
+      <div class="sbody"><h3>Click any notebook button above</h3><p>Each button opens that notebook in Google Colab. Start with notebook 01 and work through them in order.</p></div>
+    </div>
+    <div class="step step-highlight">
+      <div class="sicon"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></div>
+      <div class="sbody"><h3>Save a copy to your Drive first</h3><p>Go to <code>File → Save a copy in Drive</code> , this gives you your own editable copy. Do this before running anything.</p></div>
+    </div>
+    <div class="step">
+      <div class="sicon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      <div class="sbody"><h3>Run cells with Shift + Enter</h3><p>Click inside any grey code cell and press <code>Shift + Enter</code>. Output appears directly below. Always run top to bottom.</p></div>
+    </div>
+    <div class="step">
+      <div class="sicon"><svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
+      <div class="sbody"><h3>Only change lines marked with ✏️</h3><p>Each notebook clearly marks which lines to edit. Everything else is set up for you , just run it and read the output.</p></div>
+    </div>
+    <div class="step">
+      <div class="sicon"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></div>
+      <div class="sbody"><h3>If something breaks: Runtime &rarr; Restart and run all</h3><p>This resets everything and re-runs all cells from the top. It fixes almost any error you'll encounter.</p></div>
+    </div>
+  </div>
+  <div class="info">
+    <strong>Note:</strong> When you first open a notebook you may see a warning saying "This notebook was not authored by Google." Click <strong>Run anyway</strong> , this is normal for any notebook shared from outside Google's systems.
+  </div>
+</div>
+
+<hr>
+
+<div class="section">
+  <p class="slabel">Context</p>
+  <h2 class="stitle">What you're preparing for</h2>
+  <p class="ssub" style="margin-bottom:1.5rem">In your SEAD courses, you will often download a full Jupyter notebook. Your job is to run cells and modify labelled values, exactly what we just practised!</p>
+  <div class="cgrid">
+    <div class="cc"><p class="clabel">SEAD 520</p><p class="cname">Life Cycle Assessment</p><p class="ctool">Brightway2</p></div>
+    <div class="cc"><p class="clabel">SEAD 540</p><p class="cname">Industrial Ecology &amp; MFA</p><p class="ctool">Pymrio · Exiobase 3</p></div>
+  </div>
+  <div class="info" style="margin-top:1.5rem">In your courses you'll run notebooks <strong>locally</strong> using <strong>Anaconda</strong> on your own computer. Your TA will walk you through that setup at the start of each course. For now, Colab gives you the same experience with zero setup.</div>
+</div>
+
+<footer>TISED SEAD Program · McGill University &nbsp;·&nbsp; Orientation Resources</footer>
+</body>
+</html>
